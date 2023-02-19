@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div class="container">
+    <h1>New Siting</h1>
+    <form id="new-siting-form" method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="animal-select">Animal</label>
+        <select id="animal-select" class="form-control">
+          <option value="">-- Select Animal --</option>
+          {% for animal in animals %}
+            <option value="{{ animal.id }}">{{ animal.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group" id="breed-group" style="display:none;">
+        <label for="breed-select">Breed</label>
+        <select id="breed-select" class="form-control">
+          <option value="">-- Select Breed --</option>
+        </select>
+      </div>
+      <div class="form-group" id="date-group" style="display:none;">
+        <label for="date-input">Date</label>
+        <input type="date" id="date-input" class="form-control">
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="button" class="btn btn-secondary" id="cancel-button">Cancel</button>
+    </form>
+  </div>
+
+  <script>
+    // Show breed select when animal is selected
+    $('#animal-select').change(function() {
+      var animal_id = $(this).val();
+      if (animal_id) {
+        $.ajax({
+          url: '/breeds/?animal_id=' + animal_id,
+          type: 'GET',
+          success: function(data) {
+            $('#breed-select').html(data);
+            $('#breed-group').show();
+          }
+        });
+      } else {
+        $('#breed-select').html('<option value="">-- Select Breed --</option>');
+        $('#breed-group').hide();
+      }
+    });
+
+    // Show date input when breed is selected
+    $('#breed-select').change(function() {
+      var breed_id = $(this).val();
+      if (breed_id) {
+        $('#date-group').show();
+      } else {
+        $('#date-group').hide();
+      }
+    });
+
+    // Handle cancel button click
+    $('#cancel-button').click(function() {
+      window.location.href = '/sitings/';
+    });
+  </script>
+{% endblock %}

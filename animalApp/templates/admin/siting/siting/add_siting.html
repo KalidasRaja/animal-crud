@@ -1,0 +1,85 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="add-siting">
+        <h1>New Siting</h1>
+        <form method="post" action="{% url 'admin:siting_siting_add_siting' %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="animal">Animal:</label>
+                    <select id="animal" name="animal" class="form-control">
+                        <option value="" selected disabled>Choose an animal</option>
+                        {% for animal in animals %}
+                        <option value="{{ animal.id }}">{{ animal.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="breed">Breed:</label>
+                    <select id="breed" name="breed" class="form-control" disabled>
+                        <option value="" selected disabled>Choose an animal first</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="date">Date:</label>
+                    <input id="date" name="date" type="date" class="form-control" disabled>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="window.location.href='{% url 'admin:siting_siting_changelist' %}'">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        var animalSelect = document.getElementById('animal');
+        var breedSelect = document.getElementById('breed');
+        var dateInput = document.getElementById('date');
+
+        animalSelect.addEventListener('change', function () {
+            var animalId = this.value;
+            breedSelect.disabled = true;
+            breedSelect.innerHTML = '<option value="" selected disabled>Choose an animal first</option>';
+            dateInput.disabled = true;
+
+            if (animalId) {
+                fetch('/admin/siting/siting/add_siting/', {
+                    method: 'POST',
+                    body: JSON.stringify({ animal: animalId }),
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' }
+                }).then(function (response) {
+                    return response.json();
+                }).then(function (data) {
+                    breedSelect.innerHTML = data.options;
+                    breedSelect.disabled = false;
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+        });
+
+        breedSelect.addEventListener('change', function () {
+            dateInput.disabled = true;
+
+            if (this.value) {
+                dateInput.disabled = false;
+            }
+        });
+    </script>
+
+</body>
+
+</html>

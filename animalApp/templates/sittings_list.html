@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Siting List</h1>
+<table>
+<thead>
+<tr>
+<th>Animal</th>
+<th>Breed</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+{% for s in sittings %}
+<tr>
+<td>{{ s.animal }}</td>
+<td>{{ s.breed }}</td>
+<td>{{ s.date }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<a href="{% url 'new_siting' %}">New</a>
+{% endblock %}
