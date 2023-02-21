@@ -1,7 +1,9 @@
 from django.contrib import admin
 from .models import *
 from import_export.admin import ImportExportModelAdmin
-reclass breedAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+
+
+class breedAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ['name', 'animal']
     list_filter = ['animal', 'name']
     search_fields = ['name', 'animal']
