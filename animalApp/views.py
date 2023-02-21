@@ -21,13 +21,11 @@ class home(View):
             instance = form.save(commit=False)
             instance.user = request.user
             instance.save()
-            # form.save(commit=True)
 
         self.context['form'] = form
         self.context['siting'] = Siting.objects.all()
         print("Hello Post : ",self.context['siting'])
         return HttpResponseRedirect(reverse('home'))
-        # return render(request, 'animal/home.html', self.context)
 def delete(request, id):
         siting = Siting.objects.get(id=id)
         siting.delete()
