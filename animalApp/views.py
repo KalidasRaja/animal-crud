@@ -1,30 +1,34 @@
-from .forms import AnimalForm, BreedForm, SitingForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from .models import Animal, Breed, Siting
 from django.views.generic import View
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
 
 
 class home(View):
     context = {}
     def get(self, request):
-        form = SitingForm
-        self.context['form'] = form
-        self.context['siting'] = Siting.objects.all().order_by('-date')
-        print("Hello Get : ",self.context['siting'])
-        return render(request, 'animal/home.html', self.context)
+        context = {
+           'animal' : Animal.objects.all(),
+            'breed' : Breed.objects.all(),
+            'siting' : Siting.objects.all().order_by('-date')
+
+        }
+        return render(request, 'animal/home.html', context)
 
     def post(self, request):
-        form = SitingForm(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.user = request.user
-            instance.save()
+        if request.method == "POST":
+            if request.POST['animal'] != '' :
+                animal_id = request.POST['animal']
+                breed_id = request.POST['breed']
+                date = request.POST['date']
+                animal = Animal.objects.get(pk=animal_id)
+                breed = Breed.objects.get(pk=breed_id)
+                s = Siting(animal=animal, breed=breed, date=date)
+                s.save()
+            else:
+                return
 
-        self.context['form'] = form
-        self.context['siting'] = Siting.objects.all()
-        print("Hello Post : ",self.context['siting'])
         return HttpResponseRedirect(reverse('home'))
 def delete(request, id):
         siting = Siting.objects.get(id=id)
@@ -32,17 +36,13 @@ def delete(request, id):
         return HttpResponseRedirect(reverse('home'))
 
 
-def index(request):
-        animal = Animal.objects.all()
-        breed = Breed.objects.all()
-        siting = Siting.objects.all()
-        context = {
-            'breed': breed,
-            'animal': animal,
-            'siting' : siting
-        }
-
-        return render(request, 'field.html', context)
-
-
-
+def ajax_data(request):
+    if request.method == "POST":
+        animal_id = request.POST['animal_id']
+        try:
+            animal = Animal.objects.filter(id = animal_id).first()
+            breed = Breed.objects.filter(animal = animal)
+        except Exception:
+            data['error_message'] = 'error'
+            return JsonResponse(data)
+    return JsonResponse(list(breed.values('id', 'name')), safe=False)

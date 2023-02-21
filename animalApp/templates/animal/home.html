@@ -71,105 +71,106 @@
       Add new
     </button>
   </div>
-  <div id="animal" class="mx-auto p-6 rounded-lg shadow-lg bg-white max-w-md hidden">
-    {% load crispy_forms_tags %}
+  <div id="animal" class="animal mx-auto p-6 rounded-lg shadow-lg bg-white max-w-md hidden">
     <h4 class=" text-xl font-semibold py-3">Siting Detail Form</h4>
-    <form method="post" id="animalForm">
-      {% csrf_token %}
-      {% if form|as_crispy_errors %}
-      {% for field in form %}
-      <div class="form-group mb-6">
-        {{field|as_crispy_field}}
+    <form action="{% url 'home' %}" method="POST">
+    {% csrf_token %}
+    <div id="animal-show" class="flex flex-col justify-center">
+      <label for="inputStatus" class=" appearance-none block px-3 py-1.5 text-base font-normal text-gray-700 focus:text-gray-700 ">
+        Animal
+      </label>
+      <div class="mb-3 xl:w-96">
+        <select id="animal-option" name="animal"
+          class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          aria-label="Default select example">
+          <option selected disabled>Choose the Animal</option>
+          {% for i in animal %}
+          <option value="{{ i.id }}">{{ i.name }}</option>
+          {% endfor %}
+        </select>
       </div>
-      {% endfor %}
-      <!-- Displaying Non field Validation error -->
-      {%if form.non_field_errors%}
-      <div class="col-md-6 p-2 text-danger">{{form.non_field_errors}}</div>
-      {%endif%}
-      <div class="flex space-x-4 justify-center">
-        <div class=" space-x-4">
-          <button type="reset" value="Reset" id="cancel"
-            class="inline-block px-6 py-2.5 bg-gray-200 text-gray-700 font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-300 hover:shadow-lg focus:bg-gray-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-400 active:shadow-lg transition duration-150 ease-in-out">
-            Cancel
-          </button>
-          <button type="submit"
-            class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
-            Save
-          </button>
-        </div>
+    </div>
+    <div class="animal flex flex-col justify-center">
+      <div class="mb-3 xl:w-96 hidden" id="breed-show" >
+        <label for="inputStatus" class=" appearance-none block px-3 py-1.5 text-base font-normal text-gray-700 focus:text-gray-700 ">
+        Breed
+      </label>
+        <select id="breed-option" name="breed"
+          class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          aria-label="Default select example">
+          <option selected disabled>Choose the Breed</option>
+        </select>
       </div>
-      {%endif%}
-    </form>
-  </div>
-  <!-- <div class="flex justify-center">
-    <label for="" class=" appearance-none block px-3 py-1.5 text-base font-normal text-gray-700 focus:text-gray-700 ">
-      Animal
-    </label>
-    <div class="mb-3 xl:w-96">
-      <select
-        class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-        aria-label="Default select example">
-        <option selected>Select the Animal</option>
-        {% for i in animal %}
-        <option value="{{ i.id }}">{{ i.name }}</option>
-        {% endfor %}
-      </select>
     </div>
-  </div>
-  <div class="flex justify-center">
-    <label for="" class=" appearance-none block px-3 py-1.5 text-base font-normal text-gray-700 focus:text-gray-700 ">
-      Breed
-    </label>
-    <div class="mb-3 xl:w-96">
-      <select
-        class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-        aria-label="Default select example">
-        <option selected>Select the Breed</option>
-        {% for i in breed %}
-        <option value="{{ i.id }}">{{ i.name }}</option>
-        {% endfor %}
-      </select>
+    <div id="date-show" class="animal flex flex-col justify-center hidden">
+      <label for="inputStatus" class=" appearance-none block px-3 py-1.5 text-base font-normal text-gray-700 focus:text-gray-700 ">
+        Date
+      </label>
+      <div class="mb-3 xl:w-96">
+        <input type="date" id="date" name="date" class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+      </div>
     </div>
-  </div>
-  <div class="flex justify-center">
-    <label for="" class=" appearance-none block px-3 py-1.5 text-base font-normal text-gray-700 focus:text-gray-700 ">
-      Date
-    </label>
-    <div class="mb-3 xl:w-96">
-      <select
-        class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-        aria-label="Default select example">
-        <option selected>Select the Date</option>
-        <option value=" ">Date</option>
-      </select>
+    <div id="save-show" class="animal flex space-x-4 justify-center hidden">
+      <div class=" space-x-4">
+        <button type="reset" id="cancel"
+          class="inline-block px-6 py-2.5 bg-gray-200 text-gray-700 font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-300 hover:shadow-lg focus:bg-gray-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-400 active:shadow-lg transition duration-150 ease-in-out">
+          Cancel
+        </button>
+        <button type="submit"
+          class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
+          Save
+        </button>
+      </div>
     </div>
+  </form>
   </div>
-  <div class="flex space-x-4 justify-center">
-    <div class=" space-x-4">
-      <button type="button" id="cancel"
-        class="inline-block px-6 py-2.5 bg-gray-200 text-gray-700 font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-300 hover:shadow-lg focus:bg-gray-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-400 active:shadow-lg transition duration-150 ease-in-out">
-        Cancel
-      </button>
-      <button type="button"
-        class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
-        Save
-      </button>
-    </div>
-  </div> -->
+
 </section>
 
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script>
+    $("#animal-option").change(function () {
+        const animalId = $(this).val();  // get the selected animal ID from the HTML dropdown list
+        $.ajax({                       // initialize an AJAX request
+            type: "POST",
+            url: '{% url "ajax_data" %}',
+            data: {
+                'animal_id': animalId,       // add the country id to the POST parameters
+                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {   // `data` is from `get_topics_ajax` view function
+                let html_data = '<option value="" selected disabled>Choose the Breed</option>';
+                data.forEach(function (data) {
+                    html_data += `<option value="${data.id}">${data.name}</option>`
+                });
+                $("#breed-option").html(html_data); // replace the contents of the topic input with the data that came from the server
+            }
+        });
+    });
+</script>
 <script>
   $("#new").click(function () {
     $("#animal").show();
-    return false;
   });
   $("#cancel").click(function () {
     $("#animal").hide();
-    return false;
+    $("#breed-show").hide();
+    $("#date-show").hide();
+    $("#save-show").hide();
+  });
+  $("#animal-show").change(function () {
+    $("#breed-show").show();
+  });
+  $("#breed-show").change(function () {
+    $("#date-show").show();
+  });
+  $("#date-show").change(function () {
+    $("#save-show").show();
   });
 </script>
-
 
 {% endblock %}

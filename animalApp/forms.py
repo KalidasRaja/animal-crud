@@ -15,7 +15,8 @@ class BreedForm(forms.ModelForm):
 class SitingForm(forms.ModelForm):
     class Meta:
         model = Siting
-        fields = ('animal', 'breed', 'date')
+        fields = '__all__'
+        # fields = ('animal', 'breed', 'date')
         
         widgets = {
             'date' : forms.DateInput(attrs={'type' : 'date'})
